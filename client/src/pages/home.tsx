@@ -15,9 +15,9 @@ export default function Home() {
 
       <ParticlesBackground />
 
-      <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
+      <div className="flex flex-col items-center justify-center min-h-[90vh] text-center px-4">
         <motion.h1 
-          className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70"
+          className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -25,20 +25,11 @@ export default function Home() {
           {PERSONAL_INFO.name}
         </motion.h1>
 
-        <motion.h2 
-          className="text-xl md:text-2xl text-foreground/60 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          {PERSONAL_INFO.title}
-        </motion.h2>
-
         <motion.p 
           className="max-w-md mb-12 text-foreground/80"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.3 }}
         >
           {PERSONAL_INFO.bio}
         </motion.p>
@@ -46,7 +37,7 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.4 }}
         >
           <SocialLinks />
         </motion.div>

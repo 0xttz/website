@@ -14,13 +14,13 @@ export function ParticlesBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden">
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-[hsl(30,20%,97%)]">
       {Array.from({ length: NUM_PARTICLES }).map((_, i) => {
         const { x, y, size, duration } = getRandomPosition();
         return (
           <motion.div
             key={i}
-            className="absolute rounded-full bg-foreground/5"
+            className="absolute rounded-full bg-foreground/10"
             style={{
               width: size,
               height: size,
