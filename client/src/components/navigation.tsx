@@ -13,14 +13,14 @@ export function Navigation() {
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       <div className="flex gap-8">
-        <NavLink href="/" isActive={location === "/"}>
-          Home
-        </NavLink>
         <NavLink href="/projects" isActive={location === "/projects"}>
-          Projects
+          projects
+        </NavLink>
+        <NavLink href="/" isActive={location === "/"}>
+          home
         </NavLink>
         <NavLink href="/thoughts" isActive={location === "/thoughts"}>
-          Thoughts
+          thoughts
         </NavLink>
       </div>
     </motion.nav>

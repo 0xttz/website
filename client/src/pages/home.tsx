@@ -15,9 +15,9 @@ export default function Home() {
 
       <ParticlesBackground />
 
-      <div className="flex flex-col items-center justify-center min-h-[90vh] text-center px-4">
+      <div className="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
         <motion.h1 
-          className="text-5xl md:text-7xl font-bold mb-8 text-foreground"
+          className="text-5xl md:text-7xl font-bold mb-8 text-foreground/90"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
