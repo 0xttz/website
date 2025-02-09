@@ -17,7 +17,7 @@ export default function Home() {
 
       <div className="flex flex-col items-center justify-center min-h-[90vh] text-center px-4">
         <motion.h1 
-          className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70"
+          className="text-5xl md:text-7xl font-bold mb-8 text-foreground"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}

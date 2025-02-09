@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { motion } from "framer-motion";
 
-const NUM_PARTICLES = 30;
+const NUM_PARTICLES = 100;
 
 export function ParticlesBackground() {
   const getRandomPosition = useCallback(() => {
@@ -20,7 +20,7 @@ export function ParticlesBackground() {
         return (
           <motion.div
             key={i}
-            className="absolute rounded-full bg-foreground/10"
+            className="absolute rounded-full bg-foreground/20"
             style={{
               width: size,
               height: size,
@@ -29,7 +29,7 @@ export function ParticlesBackground() {
             }}
             animate={{
               y: [0, -20, 0],
-              opacity: [0.5, 1, 0.5],
+              opacity: [0.7, 1, 0.7]
             }}
             transition={{
               duration,
