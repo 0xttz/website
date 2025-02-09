@@ -46,8 +46,8 @@
   </div>
   <h1 in:fly={{ y: 20, duration: 400, delay: 150 }}>Lennard Kaye</h1>
   <div class="description" in:fly={{ y: 20, duration: 400, delay: 250 }}>
-    <p>Passionate about many things — mostly AI and <a href="https://x.com/karpathy/status/1886192184808149383" target="_blank" rel="noopener noreferrer">vibe coding</a>.</p>
-    <p>Curious minds welcome — let's chat about tech and ideas.</p>
+    <p>Passionate about the world, AI and <a href="https://x.com/karpathy/status/1886192184808149383" target="_blank" rel="noopener noreferrer">vibe coding</a>.</p>
+    <p>Curious minds welcome — Please reach out!</p>
   </div>
   
   <div class="social-links" in:fly={{ y: 20, duration: 400, delay: 350 }}>
