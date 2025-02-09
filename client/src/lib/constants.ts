@@ -6,8 +6,10 @@ export const PERSONAL_INFO = {
 
 export const SOCIAL_LINKS = {
   github: "https://github.com/johndoe",
-  twitter: "https://twitter.com/johndoe",
+  x: "https://x.com/johndoe",
   linkedin: "https://linkedin.com/in/johndoe",
+  goodreads: "https://goodreads.com/johndoe",
+  lichess: "https://lichess.org/@/johndoe",
 };
 
 export const PROJECTS = [
