@@ -1,6 +1,5 @@
 export const PERSONAL_INFO = {
   name: "John Doe",
-  title: "Software Engineer",
   bio: "Building elegant solutions to complex problems. Passionate about web technologies and open source.",
 };
 
@@ -16,12 +15,26 @@ export const PROJECTS = [
   {
     title: "Project One",
     description: "A revolutionary app that changes how we think about technology.",
+    details: `Key Features:
+• Real-time collaboration with WebSocket integration
+• Advanced data visualization using D3.js
+• Responsive design with mobile-first approach
+• Server-side rendering for optimal performance
+
+The project showcases modern web development practices and demonstrates scalable architecture patterns.`,
     tags: ["React", "TypeScript", "Node.js"],
     link: "https://project-one.com",
   },
   {
     title: "Project Two",
     description: "Innovative solution for modern problems.",
+    details: `Technical Highlights:
+• Serverless architecture using AWS Lambda
+• GraphQL API with real-time subscriptions
+• Automated CI/CD pipeline
+• Comprehensive test coverage with Jest
+
+This project emphasizes clean code practices and maintainable architecture.`,
     tags: ["Next.js", "TailwindCSS", "PostgreSQL"],
     link: "https://project-two.com",
   },
