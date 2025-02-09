@@ -16,7 +16,7 @@ export function ParticlesBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-[hsl(30,20%,97%)]">
+    <div className="fixed inset-0 -z-10 overflow-hidden">
       {Array.from({ length: NUM_PARTICLES }).map((_, i) => {
         const { x, y, size, duration, delay, offsetX } = getRandomPosition();
         return (
