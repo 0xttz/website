@@ -6,18 +6,24 @@ set -x
 
 echo "🚀 Starting deployment..."
 
-# Print environment info
-echo "Current directory: $(pwd)"
-echo "Current user: $(whoami)"
-which node || echo "node not found in PATH"
-which npm || echo "npm not found in PATH"
+# Print system info
+echo "System information:"
+uname -a || echo "uname not available"
+ls -la /usr/bin/node* || echo "No node in /usr/bin"
+ls -la /usr/local/bin/node* || echo "No node in /usr/local/bin"
+ls -la /opt/plesk || echo "No plesk directory"
 
 # Try to find Node.js installation
 POSSIBLE_PATHS=(
     "/opt/plesk/node/22/bin"
     "/opt/plesk/node/current/bin"
     "/usr/local/bin"
+    "/usr/bin"
     "/opt/plesk/node/22.13.1/bin"
+    "/opt/plesk/nodejs/22/bin"
+    "/opt/plesk/nodejs/current/bin"
+    "/opt/nodejs/bin"
+    "/usr/local/nodejs/bin"
 )
 
 echo "Checking possible Node.js paths..."
@@ -32,7 +38,10 @@ done
 
 if [ -z "$NODE_BIN" ]; then
     echo "❌ Could not find Node.js installation"
-    ls -la /opt/plesk/node || echo "Cannot access /opt/plesk/node"
+    echo "Searching for node binary anywhere in /usr:"
+    find /usr -name node 2>/dev/null || echo "No node found in /usr"
+    echo "Searching for node binary anywhere in /opt:"
+    find /opt -name node 2>/dev/null || echo "No node found in /opt"
     exit 1
 fi
 
