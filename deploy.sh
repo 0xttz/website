@@ -48,9 +48,8 @@ fi
 echo "📍 Found Node.js at: $NODE_BIN"
 export PATH="$NODE_BIN:$PATH"
 
-# Navigate to the application directory
-echo "Navigating to application directory..."
-cd /lennardkaye.me
+# Navigate to the correct application directory
+cd /var/www/vhosts/tei.world/lennardkaye.me
 echo "Current directory: $(pwd)"
 ls -la
 
