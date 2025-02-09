@@ -8,9 +8,9 @@ export function ParticlesBackground() {
     return {
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 3 + 1,
-      duration: Math.random() * 20 + 10,
-      offsetX: (Math.random() - 0.5) * 30, // Random horizontal movement
+      size: Math.random() * 2 + 0.5, // Smaller particles
+      duration: Math.random() * 15 + 10,
+      offsetX: (Math.random() - 0.5) * 20, // Subtle horizontal movement
     };
   }, []);
 
@@ -21,7 +21,7 @@ export function ParticlesBackground() {
         return (
           <motion.div
             key={i}
-            className="absolute rounded-full bg-foreground/20"
+            className="absolute rounded-full bg-foreground/10"
             style={{
               width: size,
               height: size,
@@ -31,7 +31,7 @@ export function ParticlesBackground() {
             animate={{
               x: [0, offsetX, 0],
               y: [0, -20, 0],
-              opacity: [0.7, 1, 0.7]
+              opacity: [0.5, 0.8, 0.5]
             }}
             transition={{
               duration,

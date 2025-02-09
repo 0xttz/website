@@ -7,7 +7,7 @@ export function Navigation() {
 
   return (
     <motion.nav 
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center h-16 bg-background/80 backdrop-blur-sm"
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center h-16 bg-background/50 backdrop-blur-sm"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}

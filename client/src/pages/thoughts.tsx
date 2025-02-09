@@ -1,7 +1,6 @@
 import { PageTransition } from "@/components/page-transition";
 import { THOUGHTS } from "@/lib/constants";
 import { motion } from "framer-motion";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Helmet } from "react-helmet-async";
 
@@ -29,25 +28,29 @@ export default function Thoughts() {
       </Helmet>
 
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-center">Thoughts</h1>
-        
         <motion.div 
-          className="space-y-6"
+          className="space-y-8"
           variants={containerVariants}
           initial="hidden"
           animate="show"
         >
           {THOUGHTS.map((post, index) => (
-            <motion.div key={index} variants={itemVariants}>
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardHeader>
-                  <div className="text-sm text-foreground/60 mb-2">
-                    {format(new Date(post.date), 'MMMM d, yyyy')}
-                  </div>
-                  <CardTitle className="text-xl mb-2">{post.title}</CardTitle>
-                  <CardDescription>{post.preview}</CardDescription>
-                </CardHeader>
-              </Card>
+            <motion.div 
+              key={index} 
+              variants={itemVariants}
+              className="group"
+            >
+              <div className="p-4 hover:bg-foreground/5 transition-colors rounded-lg">
+                <div className="text-sm text-foreground/40 mb-2">
+                  {format(new Date(post.date), 'MMMM d, yyyy')}
+                </div>
+                <h2 className="text-xl font-medium mb-2 text-foreground/90">
+                  {post.title}
+                </h2>
+                <p className="text-foreground/60">
+                  {post.preview}
+                </p>
+              </div>
             </motion.div>
           ))}
         </motion.div>
