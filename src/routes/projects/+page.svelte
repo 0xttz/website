@@ -2,6 +2,11 @@
   import { fade, fly } from 'svelte/transition';
 </script>
 
+<svelte:head>
+  <title>projects</title>
+  <meta name="description" content="A list of my projects" />
+</svelte:head>
+
 <div class="container" in:fade={{ duration: 300, delay: 150 }}>
   <div class="content" in:fly={{ y: 20, duration: 400, delay: 250 }}>
     <div class="illustration">
@@ -16,7 +21,7 @@
     </div>
     <h1>Projects</h1>
     <div class="placeholder">
-      <p>A curated collection of my work will be added soon.</p>
+      <p>Work in progress.</p>
     </div>
   </div>
 </div>
@@ -31,8 +36,8 @@
   }
 
   .illustration {
-    width: 200px;
-    height: 100px;
+    width: 400px;
+    height: 180px;
     margin: 0 auto 1rem;
     opacity: 0.9;
     transition: all 0.3s ease;
@@ -44,10 +49,7 @@
   }
 
   h1 {
-    font-size: 2.5rem;
-    color: #2c1810;
     margin-bottom: 2rem;
-    font-weight: 700;
   }
 
   .placeholder {

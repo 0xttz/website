@@ -36,7 +36,7 @@
 </script>
 
 <svelte:head>
-  <title>Recommendations | Lennard Kaye</title>
+  <title>recommendations</title>
   <meta name="description" content="Books, essays, and videos I recommend" />
 </svelte:head>
 
@@ -54,7 +54,7 @@
     </div>
     <h1>Recommendations</h1>
     <div class="placeholder">
-      <p>A curated list of my favorite books, tools, and resources will be added soon.</p>
+      <p>A list of my favorite books, tools, and resources will be added soon.</p>
     </div>
   </div>
 </div>
@@ -69,8 +69,8 @@
   }
 
   .illustration {
-    width: 200px;
-    height: 100px;
+    width: 400px;
+    height: 200px;
     margin: 0 auto 1rem;
     opacity: 0.9;
     transition: all 0.3s ease;
@@ -82,10 +82,7 @@
   }
 
   h1 {
-    font-size: 2.5rem;
-    color: #2c1810;
     margin-bottom: 2rem;
-    font-weight: 700;
   }
 
   .placeholder {
