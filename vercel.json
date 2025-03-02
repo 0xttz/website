@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+      { 
+        "source": "/mama-financials", 
+        "destination": "https://mama-financials.vercel.app" 
+      },
+      { 
+        "source": "/mama-financials/(.*)", 
+        "destination": "https://mama-financials.vercel.app/$1" 
+      }
+    ]
+  }
