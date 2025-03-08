@@ -3,6 +3,9 @@
   import { fade, fly, crossfade, slide } from 'svelte/transition';
   import { cubicInOut, cubicOut } from 'svelte/easing';
   import { navigationDirection, currentPath, previousPath, getAnimationProps } from '$lib/stores';
+  import { onMount } from 'svelte';
+  import { tweened } from 'svelte/motion';
+  import { cubicOut as cubicOutMotion } from 'svelte/easing';
 
   export let data;
 
@@ -34,29 +37,58 @@
     currentPath.set(data.url);
   }
 
+  // Create a tweened store for the underline position
+  const underlinePosition = tweened(0, {
+    duration: 600,
+    easing: cubicOutMotion
+  });
+
   $: isActive = (path: string) => {
     // Check if the current pathname matches exactly or if it's a sub-route of the path
     // e.g. /projects/project-1 should still show projects as active
     return $page.url.pathname === path || 
            (path !== '/' && $page.url.pathname.startsWith(path + '/'));
   };
+  
+  // Update the underline position based on active link
+  $: {
+    if (isActive('/projects')) {
+      underlinePosition.set(0);
+    } else if (isActive('/')) {
+      underlinePosition.set(1);
+    } else if (isActive('/thoughts')) {
+      underlinePosition.set(2);
+    } else if (isActive('/recommendations')) {
+      underlinePosition.set(3);
+    }
+  }
+  
+  // Add scroll detection for header styling
+  let scrolled = false;
+  
+  onMount(() => {
+    const handleScroll = () => {
+      scrolled = window.scrollY > 20;
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  });
 </script>
 
 <div class="background">
   <div class="gradient"></div>
 </div>
 
-<nav>
+<nav class:scrolled>
   <div class="nav-container">
     <div class="nav-links">
       <div class="nav-items">
         <div class="underline-container">
-          <div class="flowing-underline" style="transform: translateX(calc({
-            isActive('/projects') ? '0' : 
-            isActive('/') ? '100% + 3rem' : 
-            isActive('/thoughts') ? '200% + 6rem' : 
-            '300% + 9rem'
-          }))"></div>
+          <div class="flowing-underline" style="transform: translateX(calc({$underlinePosition} * (100% + 3rem)))"></div>
         </div>
         <a href="/projects" class:active={isActive('/projects')}>
           <span class="text">projects</span>
@@ -110,16 +142,31 @@
   nav {
     position: sticky;
     top: 0;
-    padding: 2rem 0;
+    padding: 1.5rem 0;
     z-index: 10;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  nav.scrolled {
     background: transparent;
-    backdrop-filter: none;
+    padding: 0.75rem 0;
+  }
+  
+  nav.scrolled .nav-container {
+    background: white;
+    border-radius: 2rem;
+    padding: 0.75rem 1.25rem;
+    box-shadow: 0 1px 3px rgba(44, 24, 16, 0.04), 0 2px 8px rgba(44, 24, 16, 0.04);
+    border: 1px solid rgba(89, 74, 66, 0.05);
+    transform: translateY(0);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .nav-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 0 1rem;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .nav-links {
@@ -150,7 +197,7 @@
     height: 2px;
     background: linear-gradient(90deg, #2c1810 0%, #594a42 100%);
     border-radius: 2px;
-    transition: transform 0.25s cubic-bezier(0.65, 0, 0.35, 1);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   a {
@@ -247,6 +294,11 @@
 
     .flowing-underline {
       width: calc((100% - 4.5rem) / 4);  /* Total width minus all gaps (1.5rem * 3) divided by 4 */
+    }
+    
+    nav.scrolled .nav-container {
+      border-radius: 1.5rem;
+      padding: 0.5rem 1rem;
     }
   }
 

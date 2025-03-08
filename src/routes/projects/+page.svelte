@@ -89,7 +89,7 @@
             class="project-link-wrapper"
             in:fade={{ 
               duration: 300, 
-              delay: animationProps.delay + 200 + (i * 50),
+              delay: 200 + (i * 50),
               easing: cubicOut
             }}
           >
@@ -97,7 +97,7 @@
               <ProjectCard 
                 {project} 
                 index={i}
-                baseDelay={animationProps.delay}
+                baseDelay={200}
               />
             </a>
           </div>
