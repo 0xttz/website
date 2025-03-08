@@ -7,6 +7,83 @@
 		<link rel="apple-touch-icon" href="%sveltekit.assets%/apple-touch-icon.png" />
 		<meta name="theme-color" content="#f5f5f0" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- Font preload to ensure consistent font metrics -->
+		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+		<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+		<style>
+			/* Font-size adjustment lock */
+			html {
+				font-size: 16px !important;
+			}
+			
+			/* Critical rendering fix - force size-adjusted GPU rendering across the entire site */
+			* {
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+				text-rendering: optimizeLegibility;
+				letter-spacing: -0.01em; /* Lock letter-spacing */
+				word-spacing: normal;
+				text-size-adjust: none;
+				-webkit-text-size-adjust: none;
+			}
+			
+			/* Force consistent sizing during animations */
+			body * {
+				box-sizing: border-box !important;
+			}
+			
+			/* Prevent layout shifts during animations */
+			.project-card, .card-inner, .project-link-wrapper, .nav-items, .text, a {
+				transform: translateZ(0);
+				backface-visibility: hidden;
+				will-change: transform, opacity;
+				font-size: inherit !important;
+				letter-spacing: inherit !important;
+			}
+			
+			/* Lock font sizes during transitions to prevent text reflow */
+			h3, p, span, time, button, a {
+				transform: translateZ(0);
+				backface-visibility: hidden;
+				font-size: 16px !important;
+				line-height: 1.5 !important;
+				font-feature-settings: "kern" 1, "liga" 1, "calt" 1 !important;
+				font-kerning: normal !important;
+			}
+			
+			/* Lock h3 size specifically */
+			h3 {
+				font-size: 20px !important;
+			}
+			
+			/* Navbar items - size lock */
+			.nav-items a .text {
+				font-size: 16px !important;
+				line-height: 1.2 !important;
+			}
+			
+			/* Disable text antialiasing issues during transitions */
+			body.transitioning * {
+				transition: none !important;
+				animation: none !important;
+			}
+		</style>
+		<script>
+			// Add class to body during page transitions
+			document.addEventListener('DOMContentLoaded', () => {
+				const html = document.documentElement;
+				
+				const observer = new MutationObserver(() => {
+					document.body.classList.add('transitioning');
+					
+					setTimeout(() => {
+						document.body.classList.remove('transitioning');
+					}, 500);
+				});
+				
+				observer.observe(document.body, { childList: true, subtree: true });
+			});
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

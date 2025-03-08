@@ -1,59 +1,212 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
+  import type { Project, ProjectFilter } from '$lib/types';
+  import ProjectCard from '$lib/components/ProjectCard.svelte';
+  import PageTransition from '$lib/components/PageTransition.svelte';
+  
+  // Sample projects data - replace with actual data source
+  const projects: Project[] = [
+    {
+      id: 'project-1',
+      title: 'AI-Powered Analytics Dashboard',
+      subtitle: 'Real-time business intelligence with machine learning insights',
+      date: '2023-12-10',
+      tags: ['AI', 'React', 'TypeScript', 'Python'],
+      coverImage: '/static/images/projects/project1.jpg',
+      architectureImage: '/static/images/projects/architecture1.svg',
+      content: '# Project details go here'
+    },
+    {
+      id: 'project-2',
+      title: 'E-commerce Recommendation Engine',
+      subtitle: 'Personalized shopping experience using collaborative filtering',
+      date: '2023-10-05',
+      tags: ['Machine Learning', 'Node.js', 'MongoDB'],
+      coverImage: '/static/images/projects/project2.jpg',
+      content: '# Project details go here'
+    },
+    {
+      id: 'project-3',
+      title: 'Blockchain-Based Document Verification',
+      subtitle: 'Secure document verification using distributed ledger technology',
+      date: '2023-08-15',
+      tags: ['Blockchain', 'Solidity', 'React', 'TypeScript'],
+      coverImage: '/static/images/projects/project3.jpg',
+      content: '# Project details go here'
+    },
+    // Add more sample projects as needed
+  ];
+  
+  // Available filters based on project tags
+  let allTags = [...new Set(projects.flatMap(p => p.tags))];
+  let currentFilter: ProjectFilter = 'all';
+  
+  $: filteredProjects = projects.filter(project => {
+    if (currentFilter === 'all') return true;
+    return project.tags.includes(currentFilter);
+  });
+  
+  // Sort projects by date (newest first)
+  $: sortedProjects = [...filteredProjects].sort((a, b) => 
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+  
+  function setFilter(filter: ProjectFilter) {
+    currentFilter = filter;
+  }
 </script>
 
 <svelte:head>
   <title>projects</title>
-  <meta name="description" content="A list of my projects" />
+  <meta name="description" content="A showcase of my projects and work" />
 </svelte:head>
 
-<div class="container" in:fade={{ duration: 300, delay: 150 }}>
-  <div class="content" in:fly={{ y: 20, duration: 400, delay: 250 }}>
-    <div class="illustration">
-      <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-        <path fill="none" stroke="#594a42" stroke-opacity="0.08" stroke-width="1.5"
-          d="M60,50 C60,35 75,20 90,20 C105,20 120,35 120,50 C120,65 105,80 90,80 C75,80 60,65 60,50" />
-        <path fill="none" stroke="#594a42" stroke-opacity="0.08" stroke-width="1.5"
-          d="M80,50 C80,40 90,30 100,30 C110,30 120,40 120,50 C120,60 110,70 100,70 C90,70 80,60 80,50" />
-        <path fill="none" stroke="#594a42" stroke-opacity="0.08" stroke-width="1.5"
-          d="M100,50 C100,45 105,40 110,40 C115,40 120,45 120,50 C120,55 115,60 110,60 C105,60 100,55 100,50" />
-      </svg>
+<PageTransition let:animationProps>
+  <div class="content">
+    <div class="filters" in:fly={animationProps.getStaggeredFly(0)}>
+      <button 
+        class:active={currentFilter === 'all'} 
+        on:click={() => setFilter('all')}
+      >
+        All
+      </button>
+      
+      {#each allTags as tag}
+        <button 
+          class:active={currentFilter === tag} 
+          on:click={() => setFilter(tag)}
+        >
+          {tag}
+        </button>
+      {/each}
     </div>
-    <h1>Projects</h1>
-    <div class="placeholder">
-      <p>Work in progress.</p>
+    
+    <div class="projects-container" in:fly={animationProps.getStaggeredFly(1)}>
+      <div class="projects-list">
+        {#each sortedProjects as project, i}
+          <div 
+            class="project-link-wrapper"
+            in:fade={{ 
+              duration: 300, 
+              delay: animationProps.delay + 200 + (i * 50),
+              easing: cubicOut
+            }}
+          >
+            <a href={`/projects/${project.id}`} class="project-link">
+              <ProjectCard 
+                {project} 
+                index={i}
+                baseDelay={animationProps.delay}
+              />
+            </a>
+          </div>
+        {/each}
+        
+        {#if sortedProjects.length === 0}
+          <div class="no-projects" in:fade={{ duration: 300, delay: 300 }}>
+            <p>No projects found matching the selected filter.</p>
+          </div>
+        {/if}
+      </div>
     </div>
   </div>
-</div>
+</PageTransition>
 
 <style>
-  .container {
-    padding: 2rem 0;
-  }
-
   .content {
-    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem 0;
   }
-
-  .illustration {
-    width: 400px;
-    height: 180px;
-    margin: 0 auto 1rem;
-    opacity: 0.9;
-    transition: all 0.3s ease;
-  }
-
-  .illustration:hover path {
-    stroke: #ff7e33;
-    stroke-opacity: 0.2;
-  }
-
-  h1 {
+  
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     margin-bottom: 2rem;
+    justify-content: center;
   }
-
-  .placeholder {
+  
+  .filters button {
+    background: none;
+    border: 1px solid rgba(89, 74, 66, 0.15);
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
     color: #594a42;
-    line-height: 1.6;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
-</style> 
+  
+  .filters button:hover {
+    background-color: rgba(89, 74, 66, 0.05);
+  }
+  
+  .filters button.active {
+    background: linear-gradient(90deg, #594a42 0%, #2c1810 100%);
+    color: white;
+    border-color: transparent;
+  }
+  
+  .projects-container {
+    width: 100%;
+    /* Force GPU acceleration */
+    transform: translateZ(0);
+  }
+  
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .project-link-wrapper {
+    /* Maintain consistent dimensions during transitions */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    margin-bottom: 1.5rem;
+    height: 160px; /* Match ProjectCard's fixed height */
+    position: relative;
+    box-sizing: border-box;
+    will-change: opacity;
+  }
+  
+  .project-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+    /* Prevent font rendering differences */
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  .no-projects {
+    text-align: center;
+    padding: 3rem 0;
+    color: #594a42;
+  }
+  
+  @media (max-width: 768px) {
+    .content {
+      padding: 0 1rem;
+    }
+    
+    .filters {
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .project-link-wrapper {
+      height: auto;
+      min-height: 300px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .filters button {
+      font-size: 14px !important;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+</style>

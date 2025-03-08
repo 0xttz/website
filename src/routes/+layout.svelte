@@ -2,53 +2,44 @@
   import { page } from '$app/stores';
   import { fade, fly, crossfade, slide } from 'svelte/transition';
   import { cubicInOut, cubicOut } from 'svelte/easing';
+  import { navigationDirection, currentPath, previousPath, getAnimationProps } from '$lib/stores';
 
   export let data;
 
+  // Get standard animation properties
+  const animations = getAnimationProps(350, 100);
+  
+  // Create crossfade animation with direction awareness
   const [send, receive] = crossfade({
-    duration: 200,
+    duration: animations.duration,
     easing: cubicInOut,
     fallback(node, params) {
-      const direction = getDirection(data.url);
-      const dx = direction === 'next' ? 100 : -100;
-      
+      // Simplified animation that only uses opacity to avoid transform issues
       return {
-        duration: 200,
+        duration: animations.duration,
         easing: cubicInOut,
-        css: (t, u) => `
+        css: (t) => `
           position: absolute;
           width: 100%;
           opacity: ${t};
-          transform: translateX(${dx * u}%) translateZ(0);
           pointer-events: ${t === 1 ? 'all' : 'none'};
-          backface-visibility: hidden;
         `
       };
     }
   });
 
-  let currentPath = data.url;
-  let previousPath = data.url;
-
-  $: if (data.url !== currentPath) {
-    previousPath = currentPath;
-    currentPath = data.url;
+  // Update path stores when URL changes
+  $: if (data.url) {
+    previousPath.set($currentPath);
+    currentPath.set(data.url);
   }
 
-  const navOrder = {
-    '/projects': 0,
-    '/': 1,
-    '/thoughts': 2,
-    '/recommendations': 3
-  } as const;
-
-  function getDirection(path: string) {
-    const current = navOrder[$page.url.pathname as keyof typeof navOrder] ?? 0;
-    const previous = navOrder[previousPath as keyof typeof navOrder] ?? 0;
-    return current > previous ? 'next' : 'prev';
-  }
-
-  $: isActive = (path: string) => $page.url.pathname === path;
+  $: isActive = (path: string) => {
+    // Check if the current pathname matches exactly or if it's a sub-route of the path
+    // e.g. /projects/project-1 should still show projects as active
+    return $page.url.pathname === path || 
+           (path !== '/' && $page.url.pathname.startsWith(path + '/'));
+  };
 </script>
 
 <div class="background">
@@ -85,14 +76,9 @@
 </nav>
 
 <div class="content-wrapper">
-  {#key data.url}
-    <main 
-      in:receive={{key: data.url}}
-      out:send={{key: data.url}}
-    >
-      <slot />
-    </main>
-  {/key}
+  <main>
+    <slot />
+  </main>
 </div>
 
 <style>

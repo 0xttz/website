@@ -1,7 +1,9 @@
 <script lang="ts">
   import { dev } from '$app/environment';
   import { fade, fly } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
   import type { ComponentType } from 'svelte';
+  import PageTransition from '$lib/components/PageTransition.svelte';
   import { 
     Github, 
     Twitter, 
@@ -33,44 +35,46 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </svelte:head>
 
-<div class="container" in:fade={{ duration: 300, delay: 150 }}>
-  <div class="illustration" in:fly={{ y: 20, duration: 400, delay: 150 }}>
-    <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-      <path fill="none" stroke="#594a42" stroke-opacity="0.12" stroke-width="1.5"
-        d="M100,20 C130,20 150,40 150,70 C150,85 135,95 120,95 C105,95 90,85 90,70 C90,55 105,45 120,45" />
-      <path fill="none" stroke="#594a42" stroke-opacity="0.12" stroke-width="1.5"
-        d="M70,30 C100,30 120,50 120,80 C120,95 105,105 90,105 C75,105 60,95 60,80 C60,65 75,55 90,55" />
-    </svg>
+<PageTransition let:animationProps>
+  <div class="container">
+    <div class="illustration" in:fly={animationProps.getStaggeredFly(0)}>
+      <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+        <path fill="none" stroke="#594a42" stroke-opacity="0.12" stroke-width="1.5"
+          d="M100,20 C130,20 150,40 150,70 C150,85 135,95 120,95 C105,95 90,85 90,70 C90,55 105,45 120,45" />
+        <path fill="none" stroke="#594a42" stroke-opacity="0.12" stroke-width="1.5"
+          d="M70,30 C100,30 120,50 120,80 C120,95 105,105 90,105 C75,105 60,95 60,80 C60,65 75,55 90,55" />
+      </svg>
+    </div>
+    
+    <h1 class="home" in:fly={animationProps.getStaggeredFly(1)}>Lennard Kaye</h1>
+    
+    <div class="description" in:fly={animationProps.getStaggeredFly(2)}>
+      <p>Creating agentic systems to augment human potential - focused on transforming both enterprise workflows and personal productivity.</p>
+      <p>Exploring the future through continuous building and learning.</p>
+    </div>
+    
+    <div class="social-links" in:fly={animationProps.getStaggeredFly(3)}>
+      {#each socialLinks as { href, icon, label }, i}
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-link"
+          class:hovered={hoveredIndex === i}
+          on:mouseenter={() => hoveredIndex = i}
+          on:mouseleave={() => hoveredIndex = -1}
+        >
+          <div class="icon">
+            <img src={icon} alt={label} />
+          </div>
+          <span class="tooltip">{label}</span>
+        </a>
+      {/each}
+    </div>
   </div>
-  <h1 class="home">Lennard Kaye</h1>
-  <div class="description" in:fly={{ y: 20, duration: 400, delay: 250 }}>
-    <p>Creating agentic systems to augment human potential - focused on transforming both enterprise workflows and personal productivity.</p>
-    <p>Exploring the future through continuous building and learning.</p>
-  </div>
-  
-  <div class="social-links" in:fly={{ y: 20, duration: 400, delay: 350 }}>
-    {#each socialLinks as { href, icon, label }, i}
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="social-link"
-        class:hovered={hoveredIndex === i}
-        on:mouseenter={() => hoveredIndex = i}
-        on:mouseleave={() => hoveredIndex = -1}
-      >
-        <div class="icon">
-          <img src={icon} alt={label} />
-        </div>
-        <span class="tooltip">{label}</span>
-      </a>
-    {/each}
-  </div>
-</div>
+</PageTransition>
 
 <style>
-
-
   .container {
     display: flex;
     flex-direction: column;
@@ -206,5 +210,4 @@
     stroke: #ff7e33;
     stroke-opacity: 0.2;
   }
-
 </style>

@@ -1,5 +1,7 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
+  import PageTransition from '$lib/components/PageTransition.svelte';
 
   interface Recommendation {
     title: string;
@@ -40,9 +42,9 @@
   <meta name="description" content="Books, essays, and videos I recommend" />
 </svelte:head>
 
-<div class="container" in:fade={{ duration: 300, delay: 150 }}>
-  <div class="content" in:fly={{ y: 20, duration: 400, delay: 250 }}>
-    <div class="illustration">
+<PageTransition let:animationProps>
+  <div class="content">
+    <div class="illustration" in:fly={animationProps.getStaggeredFly(0)}>
       <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
         <path fill="none" stroke="#594a42" stroke-opacity="0.08" stroke-width="1.5"
           d="M20,20 C60,20 100,80 140,80 C160,80 180,60 180,40" />
@@ -52,20 +54,19 @@
           d="M60,60 C100,60 140,20 180,20" />
       </svg>
     </div>
-    <h1>Recommendations</h1>
-    <div class="placeholder">
+    
+    <h1 in:fly={animationProps.getStaggeredFly(1)}>Recommendations</h1>
+    
+    <div class="placeholder" in:fly={animationProps.getStaggeredFly(2)}>
       <p>A list of my favorite books, tools, and resources will be added soon.</p>
     </div>
   </div>
-</div>
+</PageTransition>
 
 <style>
-  .container {
-    padding: 2rem 0;
-  }
-
   .content {
     text-align: center;
+    padding: 2rem 0;
   }
 
   .illustration {
