@@ -45,7 +45,7 @@
            (path !== '/' && $page.url.pathname.startsWith(path + '/'));
   };
   
-  // Helper function to get position index from path
+  // Function to get position index from path
   function getPositionFromPath(path: string): number {
     if (path.startsWith('/projects/') || path === '/projects') return 0;
     if (path === '/') return 1;
@@ -199,7 +199,7 @@
   }
 
   .nav-container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 0 1rem;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -305,9 +305,10 @@
 
   .content-wrapper {
     position: relative;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     min-height: calc(100vh - 120px);
+    max-height: calc(100vh - 120px);
     overflow: visible;
     padding: 0 1rem;
   }
@@ -317,7 +318,8 @@
     top: 0;
     left: 1rem;
     right: 1rem;
-    padding: 2rem;
+    height: 100%;
+    padding: 0;
     background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(10px);
     border-radius: 1rem;
