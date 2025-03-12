@@ -49,6 +49,7 @@
     box-sizing: border-box;
     position: relative;
     z-index: 1;
+    will-change: transform;
   }
   
   .card-inner {
@@ -62,8 +63,9 @@
     height: 100%;
     position: relative;
     -webkit-font-smoothing: antialiased;
-    transition: box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: box-shadow, border-color;
   }
   
   .card-inner:hover {
@@ -82,7 +84,8 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: filter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: filter;
   }
   
   .image-overlay {
@@ -92,8 +95,9 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, rgba(245, 245, 240, 0) 0%, rgba(44, 24, 16, 0.03) 100%);
-    transition: opacity 0.25s ease;
+    transition: opacity 0.2s ease;
     opacity: 0;
+    will-change: opacity;
   }
   
   .card-inner:hover .card-image img {
@@ -176,7 +180,8 @@
     height: 100%;
     background: linear-gradient(180deg, #594a42 0%, #2c1810 100%);
     opacity: 0;
-    transition: opacity 0.25s ease;
+    transition: opacity 0.2s ease;
+    will-change: opacity;
   }
   
   .card-inner:hover .hover-indicator {

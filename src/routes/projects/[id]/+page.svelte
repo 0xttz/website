@@ -4,6 +4,7 @@
   import { cubicOut } from 'svelte/easing';
   import type { Project } from '$lib/types';
   import PageTransition from '$lib/components/PageTransition.svelte';
+  import { onMount } from 'svelte';
   
   // This would normally come from a data loading function
   // For now we're using sample data
@@ -14,7 +15,7 @@
       subtitle: 'Real-time business intelligence with machine learning insights',
       date: '2023-12-10',
       tags: ['AI', 'React', 'TypeScript', 'Python'],
-      coverImage: '/images/projects/project1.jpg',
+      coverImage: '/images/projects/project1.png',
       architectureImage: '/images/projects/architecture1.svg',
       content: `
 # AI-Powered Analytics Dashboard
@@ -39,7 +40,7 @@ The frontend was built with React and TypeScript, while the backend analytics en
       subtitle: 'Personalized shopping experience using collaborative filtering',
       date: '2023-10-05',
       tags: ['Machine Learning', 'Node.js', 'MongoDB'],
-      coverImage: '/images/projects/project2.jpg',
+      coverImage: '/images/projects/project2.png',
       content: `
 # E-commerce Recommendation Engine
 
@@ -53,11 +54,34 @@ The system uses collaborative filtering algorithms to analyze purchase patterns 
 - MongoDB for data storage
 - Machine learning libraries for recommendation algorithms
       `
+    },
+    'project-3': {
+      id: 'project-3',
+      title: 'Blockchain-Based Document Verification',
+      subtitle: 'Secure document verification using distributed ledger technology',
+      date: '2023-08-15',
+      tags: ['Blockchain', 'Solidity', 'React', 'TypeScript'],
+      coverImage: '/images/projects/project3.png',
+      content: `
+# Blockchain-Based Document Verification
+
+A system that uses blockchain technology to verify the authenticity and integrity of important documents.
+
+## Problem Solved
+Document fraud and tampering are significant issues in many industries. This solution provides an immutable record of document history.
+
+## Implementation
+The system was built using Ethereum smart contracts for the verification logic and React for the user interface.
+      `
     }
   };
 
   const id = $page.params.id;
   const project = projects[id];
+  
+  onMount(() => {
+    console.log('Project detail page mounted, id:', id);
+  });
 </script>
 
 <svelte:head>
@@ -68,12 +92,12 @@ The system uses collaborative filtering algorithms to analyze purchase patterns 
 {#if project}
   <PageTransition let:animationProps>
     <div class="project-container">
-      <div class="header-section" in:fly={animationProps.getStaggeredFly(0)}>
-        <div class="cover-image" in:fly={animationProps.getStaggeredFly(1)}>
+      <div class="header-section" in:fly|global={animationProps.getStaggeredFly(0)}>
+        <div class="cover-image">
           <img src={project.coverImage} alt={project.title} />
         </div>
         
-        <div class="project-header" in:fly={animationProps.getStaggeredFly(2)}>
+        <div class="project-header">
           <h1>{project.title}</h1>
           <p class="subtitle">{project.subtitle}</p>
           
@@ -95,7 +119,7 @@ The system uses collaborative filtering algorithms to analyze purchase patterns 
         </div>
       </div>
       
-      <div class="content-section" in:fly={animationProps.getStaggeredFly(3)}>
+      <div class="content-section" in:fly|global={animationProps.getStaggeredFly(1)}>
         {#if project.architectureImage}
           <div class="architecture-diagram">
             <h2>Architecture</h2>
@@ -121,6 +145,10 @@ The system uses collaborative filtering algorithms to analyze purchase patterns 
             {/each}
           </div>
         </div>
+      </div>
+      
+      <div class="back-link" in:fly|global={animationProps.getStaggeredFly(2)}>
+        <a href="/projects" class="back-button">← Back to projects</a>
       </div>
     </div>
   </PageTransition>
@@ -213,6 +241,7 @@ The system uses collaborative filtering algorithms to analyze purchase patterns 
     padding: 2rem;
     box-shadow: 0 4px 12px rgba(44, 24, 16, 0.03);
     border: 1px solid rgba(89, 74, 66, 0.08);
+    margin-bottom: 2rem;
   }
   
   .architecture-diagram {
@@ -260,12 +289,34 @@ The system uses collaborative filtering algorithms to analyze purchase patterns 
   }
   
   .markdown li {
-    margin-bottom: 0.5rem;
+    margin: 0.5rem 0;
+  }
+  
+  .back-link {
+    margin-top: 2rem;
+    text-align: left;
+  }
+  
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    color: #594a42;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    background-color: rgba(89, 74, 66, 0.08);
+    transition: all 0.2s ease;
+  }
+  
+  .back-button:hover {
+    background-color: rgba(89, 74, 66, 0.12);
+    color: #2c1810;
   }
   
   .not-found {
     text-align: center;
-    padding: 5rem 1rem;
+    padding: 4rem 1rem;
     color: #594a42;
   }
   
@@ -279,7 +330,7 @@ The system uses collaborative filtering algorithms to analyze purchase patterns 
   
   @media (max-width: 768px) {
     .project-container {
-      padding: 1.5rem 1rem;
+      padding: 1rem;
     }
     
     h1 {

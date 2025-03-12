@@ -42,6 +42,21 @@ export const navigationDirection = derived(
     const currentRoot = getRootPath($currentPath);
     const previousRoot = getRootPath($previousPath);
     
+    // Special case for project detail pages - check this first
+    if ($currentPath.startsWith('/projects/') && $previousPath === '/projects') {
+      return {
+        x: 0,
+        y: 1, // Positive y means animate from bottom
+        direction: 'vertical' as const
+      };
+    } else if ($currentPath === '/projects' && $previousPath.startsWith('/projects/')) {
+      return {
+        x: 0,
+        y: -1, // Negative y means animate from top
+        direction: 'vertical' as const
+      };
+    }
+    
     // Get positions or default to origin
     const currentPos = (routePositions[currentRoot as RouteKey] || { x: 0, y: 0 });
     const previousPos = (routePositions[previousRoot as RouteKey] || { x: 0, y: 0 });
@@ -61,22 +76,22 @@ export const navigationDirection = derived(
 );
 
 // Helper function to get animation properties based on direction
-export function getAnimationProps(duration = 400, delay = 100) {
+export function getAnimationProps(duration = 250, delay = 0) {
   return {
-    // For fly transitions: x movement
+    // For fly transitions: x movement (reduced from 60 to 40 for faster transitions)
     getX: (multiplier = 1) => derived(
       navigationDirection, 
-      ($dir) => $dir.x * -60 * multiplier
+      ($dir) => $dir.x * -40 * multiplier
     ),
-    // For fly transitions: y movement
+    // For fly transitions: y movement (reduced from 60 to 40 for faster transitions)
     getY: (multiplier = 1) => derived(
       navigationDirection, 
-      ($dir) => $dir.y * -60 * multiplier
+      ($dir) => $dir.y * -40 * multiplier
     ),
-    // For crossfade/main transitions
+    // For crossfade/main transitions (reduced from 150 to 100 for faster transitions)
     getCrossfadeX: (multiplier = 1) => derived(
       navigationDirection, 
-      ($dir) => $dir.x * -150 * multiplier
+      ($dir) => $dir.x * -100 * multiplier
     ),
     // Standard durations and delays
     duration,

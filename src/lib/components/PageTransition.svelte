@@ -2,12 +2,13 @@
   import { fade, fly } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   import { getAnimationProps, navigationDirection } from '$lib/stores';
+  import { onMount } from 'svelte';
 
-  // Optional parameters to configure the transitions
-  export let duration: number = 400;
-  export let baseFadeDuration: number = 300;
-  export let baseDelay: number = 100;
-  export let staggerDelay: number = 50;
+  // Reduced durations for crisper transitions
+  export let duration: number = 250;
+  export let baseFadeDuration: number = 180;
+  export let baseDelay: number = 0;
+  export let staggerDelay: number = 30;
   export let easing = cubicOut;
   
   // Get animation properties
@@ -35,7 +36,7 @@
       x: $xOffset,
       y: 0,
       duration,
-      delay: baseDelay + 100 + (index * staggerDelay),
+      delay: baseDelay + 50 + (index * staggerDelay),
       easing
     }),
     getContainerFade: (extraDelay: number = 0) => ({
@@ -55,8 +56,10 @@
     display: contents;
     position: relative;
     width: 100%;
-    /* Ensure consistent rendering across animations */
+    /* Optimize for animations */
+    will-change: transform, opacity;
     transform: translateZ(0);
     -webkit-font-smoothing: antialiased;
+    backface-visibility: hidden;
   }
 </style> 

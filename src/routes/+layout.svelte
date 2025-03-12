@@ -6,11 +6,12 @@
   import { onMount } from 'svelte';
   import { tweened } from 'svelte/motion';
   import { cubicOut as cubicOutMotion } from 'svelte/easing';
+  import { preloadCode, preloadData } from '$app/navigation';
 
   export let data;
 
-  // Get standard animation properties
-  const animations = getAnimationProps(350, 100);
+  // Get standard animation properties with reduced duration
+  const animations = getAnimationProps(250, 0);
   
   // Create crossfade animation with direction awareness
   const [send, receive] = crossfade({
@@ -37,12 +38,6 @@
     currentPath.set(data.url);
   }
 
-  // Create a tweened store for the underline position
-  const underlinePosition = tweened(0, {
-    duration: 600,
-    easing: cubicOutMotion
-  });
-
   $: isActive = (path: string) => {
     // Check if the current pathname matches exactly or if it's a sub-route of the path
     // e.g. /projects/project-1 should still show projects as active
@@ -50,21 +45,53 @@
            (path !== '/' && $page.url.pathname.startsWith(path + '/'));
   };
   
+  // Helper function to get position index from path
+  function getPositionFromPath(path: string): number {
+    if (path.startsWith('/projects/') || path === '/projects') return 0;
+    if (path === '/') return 1;
+    if (path.startsWith('/thoughts')) return 2;
+    if (path.startsWith('/recommendations')) return 3;
+    return 1; // Default to home
+  }
+  
+  // Initialize the underline position based on the current path
+  const initialPosition = getPositionFromPath($page.url.pathname);
+  
+  // Create a tweened store for the underline position with the correct initial value
+  const underlinePosition = tweened(initialPosition, {
+    duration: 250,
+    easing: cubicOut
+  });
+  
+  // Track if this is the initial page load
+  let isInitialLoad = true;
+  
   // Update the underline position based on active link
   $: {
-    if (isActive('/projects')) {
-      underlinePosition.set(0);
-    } else if (isActive('/')) {
-      underlinePosition.set(1);
-    } else if (isActive('/thoughts')) {
-      underlinePosition.set(2);
-    } else if (isActive('/recommendations')) {
-      underlinePosition.set(3);
+    const newPosition = getPositionFromPath($page.url.pathname);
+    
+    // Only animate if it's not the initial load
+    if (!isInitialLoad) {
+      // Start the underline animation immediately when navigation begins
+      // This ensures it's synchronized with the page transition
+      underlinePosition.set(newPosition, { 
+        duration: 250, // Match page transition duration exactly
+        easing: cubicOut // Use the same easing as page transitions
+      });
+    } else {
+      isInitialLoad = false;
     }
   }
   
   // Add scroll detection for header styling
   let scrolled = false;
+  
+  // Preload pages on hover
+  function preloadPage(path: string) {
+    // Use both methods for maximum preloading
+    preloadCode(path);
+    preloadData(path);
+  }
   
   onMount(() => {
     const handleScroll = () => {
@@ -72,6 +99,15 @@
     };
     
     window.addEventListener('scroll', handleScroll);
+    
+    // Preload all main navigation pages on initial load for instant navigation
+    setTimeout(() => {
+      // Delay preloading slightly to prioritize current page rendering
+      preloadPage('/projects');
+      preloadPage('/');
+      preloadPage('/thoughts');
+      preloadPage('/recommendations');
+    }, 300);
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -90,16 +126,16 @@
         <div class="underline-container">
           <div class="flowing-underline" style="transform: translateX(calc({$underlinePosition} * (100% + 3rem)))"></div>
         </div>
-        <a href="/projects" class:active={isActive('/projects')}>
+        <a href="/projects" class:active={isActive('/projects')} on:mouseenter={() => preloadPage('/projects')}>
           <span class="text">projects</span>
         </a>
-        <a href="/" class:active={isActive('/')}>
+        <a href="/" class:active={isActive('/')} on:mouseenter={() => preloadPage('/')}>
           <span class="text">home</span>
         </a>
-        <a href="/thoughts" class:active={isActive('/thoughts')}>
+        <a href="/thoughts" class:active={isActive('/thoughts')} on:mouseenter={() => preloadPage('/thoughts')}>
           <span class="text">thoughts</span>
         </a>
-        <a href="/recommendations" class:active={isActive('/recommendations')}>
+        <a href="/recommendations" class:active={isActive('/recommendations')} on:mouseenter={() => preloadPage('/recommendations')}>
           <span class="text">recommendations</span>
         </a>
       </div>
@@ -180,6 +216,7 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 3rem;
     width: 100%;
+    will-change: transform;
   }
 
   .underline-container {
@@ -197,7 +234,8 @@
     height: 2px;
     background: linear-gradient(90deg, #2c1810 0%, #594a42 100%);
     border-radius: 2px;
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
   }
 
   a {
@@ -258,11 +296,11 @@
   }
 
   :global(.underline-enter) {
-    animation: flowIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: flowIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   :global(.underline-exit) {
-    animation: flowOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: flowOut 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   .content-wrapper {
